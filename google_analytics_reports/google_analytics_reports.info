@@ -1,0 +1,12 @@
+name = "Google Analytics Reports"
+package = Statistics
+description = "Provides interface to access Google Analytics API statistics."
+core = 6.x
+dependencies[] = google_analytics_api
+dependencies[] = chart
+; Information added by drupal.org packaging script on 2012-04-16
+version = "6.x-1.1"
+core = "6.x"
+project = "google_analytics_reports"
+datestamp = "1334611898"
+
