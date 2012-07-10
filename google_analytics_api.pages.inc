@@ -10,15 +10,15 @@
  */
 function google_analytics_api_admin() {
 
-	$form = array();
-	$GAFeed = google_analytics_api_new_gafeed();
+  $form = array();
+  $GAFeed = google_analytics_api_new_gafeed();
 
-	if ($GAFeed) {
-		$account = google_analytics_api_account_data();
-	}
-	else {
-		$account = NULL;
-	}
+  if ($GAFeed) {
+    $account = google_analytics_api_account_data();
+  }
+  else {
+    $account = NULL;
+  }
 
   /* If there is at least one profile */
   if (!empty($account->results)) {
@@ -103,22 +103,22 @@ function google_analytics_api_admin() {
       '#collapsed' => FALSE,
     );
     $form['setup']['client_id'] = array(
-		'#type' => 'textfield',
-		'#title' => t('Client ID'),
-		'#default_value' => variable_get('google_analytics_reports_client_id', ''),
-		'#size' => 30,
-		'#description' => t('Client ID created for the app in the access tab of the ') . l('Google API Console', 'http://code.google.com/apis/console', array('attributes' => array('target' => '_blank'))),
-		'#weight' => -9,
-	);
+    '#type' => 'textfield',
+    '#title' => t('Client ID'),
+    '#default_value' => variable_get('google_analytics_reports_client_id', ''),
+    '#size' => 30,
+    '#description' => t('Client ID created for the app in the access tab of the ') . l('Google API Console', 'http://code.google.com/apis/console', array('attributes' => array('target' => '_blank'))),
+    '#weight' => -9,
+  );
 
-	$form['setup']['client_secret'] = array(
-		'#type' => 'textfield',
-		'#title' => t('Client Secret'),
-		'#default_value' => variable_get('google_analytics_reports_client_secret', ''),
-		'#size' => 30,
-		'#description' => t('Client Secret created for the app in the Google API Console'),
-		'#weight' => -8,
-	);
+  $form['setup']['client_secret'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Client Secret'),
+    '#default_value' => variable_get('google_analytics_reports_client_secret', ''),
+    '#size' => 30,
+    '#description' => t('Client Secret created for the app in the Google API Console'),
+    '#weight' => -8,
+  );
    $form['setup']['setup_submit'] = array(
       '#type' => 'submit',
       '#value' => t('Start setup and authorize account'),
@@ -131,30 +131,30 @@ function google_analytics_api_admin() {
  * Submit handler.  Begins the OAuth process, revokes tokens, saves profiles.
 */
 function google_analytics_api_admin_submit($form, &$form_state) {
-	$op = isset($form_state['values']['op']) ? $form_state['values']['op'] : '';
-	cache_clear_all('GAFeed', 'cache', '*');
-	switch ($op) {
-	    case t('Start setup and authorize account'):
-			$client_id = $form_state['values']['client_id'];
-			$client_secret = $form_state['values']['client_secret'];
-		
-			variable_set('google_analytics_reports_client_id', $client_id);
-			variable_set('google_analytics_reports_client_secret', $client_secret);
-		
-	        module_load_include('inc', 'google_analytics_api', 'GAFeed.lib');
-	        $GAFeed = new GAFeed();
-			$GAFeed -> beginAuthentication($client_id);
-			break;
-		case t('Save settings'):
-	        variable_set('google_analytics_reports_profile_id', $form_state['values']['google_analytics_reports_profile_id']);
-	        variable_set('google_analytics_reports_cache_length', $form_state['values']['google_analytics_reports_cache_length']);
-	        drupal_set_message(t('Settings have been saved successfully.'));
-	    	break;
-	    case t('Revoke access token'):
-	        google_analytics_api_revoke();
-	        drupal_set_message(t('Access token has been successfully revoked.'));
-	      	break;
-	}
+  $op = isset($form_state['values']['op']) ? $form_state['values']['op'] : '';
+  cache_clear_all('GAFeed', 'cache', '*');
+  switch ($op) {
+    case t('Start setup and authorize account'):
+      $client_id = $form_state['values']['client_id'];
+      $client_secret = $form_state['values']['client_secret'];
+    
+      variable_set('google_analytics_reports_client_id', $client_id);
+      variable_set('google_analytics_reports_client_secret', $client_secret);
+    
+      module_load_include('inc', 'google_analytics_api', 'GAFeed.lib');
+      $GAFeed = new GAFeed();
+      $GAFeed -> beginAuthentication($client_id);
+      break;
+    case t('Save settings'):
+      variable_set('google_analytics_reports_profile_id', $form_state['values']['google_analytics_reports_profile_id']);
+      variable_set('google_analytics_reports_cache_length', $form_state['values']['google_analytics_reports_cache_length']);
+      drupal_set_message(t('Settings have been saved successfully.'));
+      break;
+    case t('Revoke access token'):
+      google_analytics_api_revoke();
+      drupal_set_message(t('Access token has been successfully revoked.'));
+      break;
+  }
 }
 
 /**
